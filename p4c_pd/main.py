@@ -25,9 +25,12 @@
 import argparse
 import os
 import sys
-import gen_pd
 import json
 
+from p4c_pd import (
+    version,
+    gen_pd
+)
 
 def get_parser():
     parser = argparse.ArgumentParser(description='p4c-pd arguments')
@@ -38,6 +41,11 @@ def get_parser():
                         help='Generate PD C/C++ code for this P4 program'
                         ' in this directory. Directory must exist.',
                         required=True)
+    parser.add_argument('--p4-prefix', dest='p4_prefix', type=str,
+                        help='P4 name use for API function prefix',
+                        default="prog", required=False)
+    parser.add_argument('--version', action='version',
+                        version=version.VERSION_NUMBER)
     return parser
 
 
@@ -56,7 +64,7 @@ def validate_path(path):
 
 # to be used for a source file
 def validate_file(path):
-    path = _validate_path(path)
+    path = validate_path(path)
     if not os.path.exists(path):
         print(path, "does not exist")
         sys.exit(1)
@@ -77,12 +85,11 @@ def main():
 
     path_json = validate_file(args.json)
     path_pd = validate_dir(args.pd)
-
     with open(path_json, "r") as read_file:
         json_dict = json.load(read_file)
 
-    gen_pd.generate_pd_source(json_dict, path_pd, p4_prefix)
+    gen_pd.generate_pd_source(json_dict, path_pd, args.p4_prefix)
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     main()

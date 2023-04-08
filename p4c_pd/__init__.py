@@ -20,6 +20,9 @@
 
 # -*- coding: utf-8 -*-
 
-__author__ = 'Antonin Bas'
-__email__ = 'antonin@barefootnetworks.com'
+from . import version
+from . import gen_pd
+
+__version__ = version.VERSION.partition("-")[-1]
+VERSION = __version__
 

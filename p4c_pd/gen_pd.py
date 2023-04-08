@@ -24,7 +24,7 @@ import os
 import sys
 import re
 
-from util.tenjin_wrapper import render_template
+from p4c_pd.util import render_template
 
 _TENJIN_PREFIX = "//::"  # Use // in prefix for C syntax processing
 
@@ -372,7 +372,7 @@ def render_all_files(render_dict, gen_dir):
                             prefix=_TENJIN_PREFIX)
 
 
-def _validate_dir(dir_name):
+def validate_dir(dir_name):
     if not os.path.isdir(dir_name):
         print(dir_name, "is not a valid directory")
         sys.exit(1)
@@ -435,7 +435,7 @@ def get_thrift_type(byte_width):
         return "binary"
 
 
-def generate_pd_source(json_dict, dest_dir, p4_prefix, args=None):
+def generate_pd_source(json_dict, dest_dir, p4_prefix):
     TABLES.clear()
     ACTIONS.clear()
     LEARN_QUANTAS.clear()
@@ -471,4 +471,4 @@ def generate_pd_source(json_dict, dest_dir, p4_prefix, args=None):
     render_dict["register_arrays"] = sort_dict(REGISTER_ARRAYS)
     render_dict["render_dict"] = render_dict
     
-    render_all_files(render_dict, _validate_dir(dest_dir))
+    render_all_files(render_dict, validate_dir(dest_dir))

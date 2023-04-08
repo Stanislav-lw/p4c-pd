@@ -19,3 +19,5 @@
 #
 
 # -*- coding: utf-8 -*-
+
+from .tenjin_wrapper import render_template
